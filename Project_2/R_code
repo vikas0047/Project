@@ -1,0 +1,313 @@
+data <- read.csv("data.csv")
+
+# Cleaning Our Dataset
+## Plot to removing outliers
+
+x <-1:dim(data)[1]
+plot(x, data$price,  main = "House No. Vs Price", xlab = "X", ylab = "Price" )
+abline(h=4489000-1)
+c <- which(data$price > (4489000-1), arr.ind = TRUE)
+data <- data[-c,]
+
+x <-1:dim(data)[1]
+plot(x, data$bedrooms,  main = "House No. Vs Bedrooms", xlab = "X", ylab = "Bedrooms")
+abline(h= 6.5)
+c <- which(data$bedrooms > (6.5), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$bathrooms, main = "House No. Vs Bathrooms", xlab = "X", ylab = "Bathrooms")
+abline(h= 5)
+c <- which(data$bathrooms > (5), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$sqft_living, main = "House No. Vs Sqft_living", xlab = "X", ylab = "Sqft_living")
+abline(h= 4000)
+c <- which(data$sqft_living > (4000), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$sqft_lot, main = "House No. Vs Sqft_lot", xlab = "X", ylab = "Sqft_lot")
+abline(h= 55050.66  )
+c <- which(data$sqft_lot > (55050.66  ), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$floors, main = "House No. Vs Floors", xlab = "X", ylab = "Floors") 
+plot( x, data$waterfront,main = "House No. Vs Water Front", xlab = "X", ylab = "Water Front")
+plot( x, data$view,main = "House No. Vs View", xlab = "X", ylab = "View")
+plot( x, data$condition, main = "House No. Vs Condition", xlab = "X", ylab = "Condition")
+
+plot( x, data$sqft_above, main = "House No. Vs Sqft_above", xlab = "X", ylab = "Sqft_above")
+abline(h= 3200)  # 3350
+c <- which(data$sqft_above > (3200), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$sqft_basement,main = "House No. Vs Sqft_basement", xlab = "X", ylab = "Sqft_basement")
+abline(h= 1200 )
+c <- which(data$sqft_basement > (1200), arr.ind = TRUE)
+data <- data[-c,]
+
+x <- 1:dim(data)[1]
+plot( x, data$yr_built,main = "House No. Vs Yr_built", xlab = "X", ylab = "Yr_built")
+
+
+## Distribution of Features of Variables
+
+par(mfrow=c(2, 3)) 
+
+# Set the target variable name
+target <- data$price  
+hist(target, 
+     col = "green", 
+     main = "Distribution of Price",
+     xlab = "Price of House",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+target <- data$sqft_living  
+hist(target, 
+     col = "green", 
+     main = "Distribution of Sqft_living",
+     xlab = "Sqft_living",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+target <- data$sqft_lot  
+hist(target, 
+     col = "green", 
+     main = "Distribution of Sqft_lot",
+     xlab = "Sqft_lot",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+target <- data$bedrooms  
+hist(target, 
+     col = "green", 
+     main = "Distribution of No. of bedrooms",
+     xlab = "Bedrooms",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+target <- data$yr_built 
+hist(target, 
+     col = "green", 
+     main = "Distribution of yr_built ",
+     xlab = "",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+target <- data$floors  
+hist(target, 
+     col = "green", 
+     main = "Distribution of Floors",
+     xlab = "Floors",
+     ylab = "Frequency",
+     cex.main = 0.8)
+
+##################### Heatmap of corr of numeric variable
+df <- data[2:14]
+cor <- cor(df)
+corr <- round(cor, 1)
+
+# Plot
+
+library(ggcorrplot)
+ggcorrplot(corr,
+           type = "lower",
+           lab = TRUE, 
+           lab_size = 2,  
+           colors = c("tomato2", "white", "springgreen3"),
+           title="Correlogram of Housing Dataset", 
+           ggtheme=theme_bw)
+
+# Scatter Plot between Price and other variables
+
+plot(x =  data$price, y = data$sqft_living ,
+     xlab = "price",
+     ylab = "sqft_living",
+     main = "price vs sqft_living"
+)
+
+plot(x =  data$price, y = data$sqft_lot ,
+     xlab = "price",
+     ylab = "sqft_lot",
+     main = "price vs sqft_lot"
+)
+
+plot(y =  data$price, x = data$bedrooms ,
+     ylab = "price",
+     xlab = "bedrooms",
+     main = "Bedrooms vs price"
+)
+
+plot(x =  data$price, y = data$bathrooms ,
+     xlab = "price",
+     ylab = "bathrooms",
+     main = "price vs bathrooms"
+)
+
+plot(x =  data$price, y = data$floors ,
+     xlab = "price",
+     ylab = "floors",
+     main = "price vs floors"
+)
+
+plot(x =  data$price, y = data$sqft_above ,
+     xlab = "price",
+     ylab = "sqft_above",
+     main = "price vs sqft_above"
+)
+
+plot(x =  data$price, y = data$sqft_basement ,
+     xlab = "price",
+     ylab = "sqft_basement",
+     main = "price vs sqft_basement"
+)
+
+plot(y =  data$price, x = as.numeric(factor(data$city)) ,
+     ylab = "price",
+     xlab = "city",
+     main = "city vs price"
+)
+
+
+
+
+# Scaling of Dataset
+
+data <- data[order(data$city),] #ordering data acording to city
+data <- na.omit(data)##removed the incomplete cases
+mean_price_data <- mean(data$price)
+stan_devi_price_data <- sd(data$price)
+column_to_remove <- c("country", "date", "yr_renovated", "street")
+data <- data[, !(names(data) %in% column_to_remove) ]#cleaning 
+
+scaled_data <- data #making space to store scaled data
+scaled_data[1:12] <- scale(data[1:12]) # scaling
+
+# Modeling
+
+Y <- as.matrix(scaled_data[ ,1]) #defining reponse variable as matrix
+X <- as.matrix(scaled_data[2:12]) #define co-variate matrix
+
+#Using ridege regresion with lembda=1
+inv_X <- solve((t(X)%*%X)+2*diag(dim(X)[2]))
+beta <-inv_X %*% t(X) %*% Y 
+
+##function for house price prediction 
+house_predction <- function( bedrooms, bathrooms, sqft_living, sqft_lot, floors, waterfront,view,         
+                             condition, sqft_above, sqft_basement, yr_built ){
+   X <- as.matrix(cbind(bedrooms, bathrooms, sqft_living, sqft_lot, floors, waterfront,view,         
+                        condition, sqft_above, sqft_basement, yr_built))
+   calculted_vlaue <- X%*% beta
+   result <- calculted_vlaue*stan_devi_price_data +mean_price_data
+   return(result)
+  
+}
+
+## Checking for modal accuracy
+
+predicted <- numeric(dim(data)[1])
+true_vlaue <- data$price
+for (i in 1:dim(data)[1]) {
+   predicted[i] <- house_predction(scaled_data$bedrooms[i], scaled_data$bathrooms[i], scaled_data$sqft_living[i], scaled_data$sqft_lot[i],
+                                   scaled_data$floors[i], scaled_data$waterfront[i],scaled_data$view[i],         
+                                   scaled_data$condition[i], scaled_data$sqft_above[i], scaled_data$sqft_basement[i], scaled_data$yr_built[i] )
+    
+   }
+cbind(head(predicted,10),head(true_vlaue,10))
+
+mse <- mean((true_vlaue - predicted)^2)
+
+rmse <-sqrt(mse)
+
+## getting the accruracy % of the data
+# Fit a linear regression model
+model <- lm(predicted ~ true_vlaue)
+# Get the summary of the model
+summary_model <- summary(model)
+# Extract R-squared value
+r_squared <- summary_model$r.squared
+# Print R-squared value
+print(r_squared)
+rmse
+
+#### Since the R square error of the data is very less so we opt for the 
+### other modelling
+
+
+
+## MODAL-II, for house price prediction
+
+city_names <- unique(scaled_data$city)
+data_city_wise <- list()
+## getting city wise data
+for (i in 1:44) {
+  data_city_wise[[i]] <- scaled_data[c(which(data$city==city_names[[i]][1],arr.ind = TRUE)),]
+}
+
+
+## function for the house price prediction modal-II
+house_predction_updated <- function( citycode, bedrooms, bathrooms, 
+                                     sqft_living, sqft_lot, floors, waterfront,view,         
+                                       condition, sqft_above, sqft_basement, yr_built ){
+  
+  X <- as.matrix(data_city_wise[[citycode]][2:12])
+  Y <- as.matrix(data_city_wise[[citycode]][1])
+  beta <- solve(t(X)%*%X+diag(dim(X)[2]))%*%t(X)%*%Y
+  
+  Z <- as.matrix(cbind(bedrooms, bathrooms, sqft_living, sqft_lot, floors, waterfront,view,         
+                       condition, sqft_above, sqft_basement, yr_built))
+  calculted_vlaue <- Z%*% beta
+  result <- calculted_vlaue*stan_devi_price_data +mean_price_data
+  return(result)
+  
+}
+
+####getting values
+predicted <- numeric(dim(data)[1])#defining vector to store predicted value
+true_vlaue <- data$price
+
+## getting the index of the rows citywise
+min_max_mat <- matrix(0, nrow = 44, ncol = 2)#for the city code value
+for (j in 1:44) {
+  min_max_mat[j,1] <-min(which(scaled_data$city==city_names[[j]], arr.ind = TRUE))
+  min_max_mat[j,2] <-max(which(scaled_data$city==city_names[[j]], arr.ind = TRUE))
+}
+
+
+#getting the predicted data for this modal-II
+for (i in 1:dim(data)[1]) {
+  for (k in 1:44) {
+    if(i>=min_max_mat[k,1] & i<=min_max_mat[k,2] )
+     citycode <-k
+    
+  
+  }
+  predicted[i] <- house_predction_updated(citycode , scaled_data$bedrooms[i], scaled_data$bathrooms[i], scaled_data$sqft_living[i], scaled_data$sqft_lot[i],
+                                          scaled_data$floors[i], scaled_data$waterfront[i],scaled_data$view[i],         
+                                          scaled_data$condition[i], scaled_data$sqft_above[i], scaled_data$sqft_basement[i], scaled_data$yr_built[i] )
+  
+}
+
+
+#checking for accuracy of the modal
+mse <- mean((true_vlaue - predicted)^2)
+rmse <-sqrt(mse)
+## getting the accruracy % of the data
+# Fit a linear regression model
+model <- lm(predicted ~ true_vlaue)
+# Get the summary of the model
+summary_model <- summary(model)
+# Extract R-squared value
+r_squared <- summary_model$r.squared
+# Print R-squared value
+print(r_squared)
+rmse
+
+
+
+
